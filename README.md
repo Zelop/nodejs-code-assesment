@@ -55,3 +55,6 @@ node tests.js ce70aa35-912b-47a8-9cb6-386c5bc2be03 policynumber 64cceef9-3a01-49
 
 Please note test requests are hardcoded on port 8000. If you change the port on main.js and want to run the same tests make sure to edit those on the 
 urls constant.
+
+### Contact info:
+You can contact me on zelopdotnet@proton.me

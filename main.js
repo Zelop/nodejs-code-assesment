@@ -1,5 +1,5 @@
 /*
-Roberto López (zelopdotnet@proton.net)
+Roberto López (zelopdotnet@proton.me)
 */
 
 const utils = require('./utils');
