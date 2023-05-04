@@ -20,9 +20,11 @@ const port = 8000;
 const URLClients = "https://www.mocky.io/v2/5808862710000087232b75ac"
 const URLPolicies = "https://www.mocky.io/v2/580891a4100000e8242b75c5"
 
+// Authlevels:
+const user_required = ["user", "admin"]
+
 
 async function main() {
-    console.warn("Attention! Role filtering isn't enabled yet. Do NOT use in Production"); // TODO Finish and remove
     let CLIENTS, POLICIES;
     // We start by loading the data into vars.
     try {
@@ -40,30 +42,50 @@ async function main() {
         return;
     }
 
-    // We proceed by declaring express GET functions
-    // TODO Express GET functions //
-    // PENDING ROLE AUTHENTICATION //
+    // We proceed by declaring express GET functions and setting up "authentication"
+
+    // ROLE AUTHENTICATION.
+    // requires roles: 'users', 'admin'
+    app.use(function(req, res, next) {
+        if (!req.headers.authorization) {
+          return res.status(403).json({ error: 'Missing credentials' });
+        } else {   
+        auth = req.headers.authorization.split(' ')[1];
+            if (!(user_required.includes(utils.get_user_role(auth, CLIENTS)))) {
+                return res.status(403).json();
+            }
+        }
+        next();
+      });
 
     // Filter by user_id
-    // requires roles: 'users', 'admin'
     app.get('/filter/id/:id', (req, res) => {
         res.json(utils.get_user_by_id(req.params.id, CLIENTS));
     });
 
     // Filter by username
-    // requires roles: 'users', 'admin'
     app.get('/filter/username/:username', (req, res) => {
         res.json(utils.get_user_by_name(req.params.username, CLIENTS));
     });
 
-    // Get list policies linked to user
+    
+    // Admin is required for the other GETs
     // requires roles: 'admin'
+    app.use(function(req, res, next) {  
+        auth = req.headers.authorization.split(' ')[1];
+            if (utils.get_user_role(auth, CLIENTS) != "admin") {
+                return res.status(403).json();
+            }
+        next();
+      });
+
+
+    // Get list policies linked to user
     app.get('/policies/list/:username', (req, res) => {
         res.json(utils.get_policies_from_user(req.params.username, POLICIES, CLIENTS));
     });
 
     // Get user linked to policy
-    // requires roles: 'admin'
     app.get('/policies/users/:id', (req, res) => {
         res.json(utils.get_user_from_policy(req.params.id, POLICIES, CLIENTS));
     });

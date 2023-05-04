@@ -41,6 +41,10 @@ get_user_by_id: function(userid, userlist){
     })
 },
 
+get_user_role: function(userid, userlist){
+    return this.get_user_by_id(userid, userlist).role
+},
+
 get_user_by_name: function(name, userlist){
     // Return user, or undefined if name doesn't exist.
     return userlist.find(function(item) {
