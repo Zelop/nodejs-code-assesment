@@ -31,7 +31,7 @@ get_url: function(url) { // Queries url and returns the response
 )},
 
 
-// We should be querying a database. I'm making the assumption every user and policy id is unique and there are no duplicates.
+// We should be querying a database. I'm making the assumption every user and policy uuid is unique and there are no duplicates.
 // So I will be using .find() instead of .filter() (except on get_policies_from_user)
 
 get_user_by_id: function(userid, userlist){
@@ -42,6 +42,7 @@ get_user_by_id: function(userid, userlist){
 },
 
 get_user_role: function(userid, userlist){
+    // Return user role
     return this.get_user_by_id(userid, userlist).role
 },
 
@@ -62,8 +63,9 @@ get_user_from_policy: function(id, policies, userlist){
 },
 
 get_policies_from_user: function(name, policies, userlist){
+    // We get the user from name
     user = this.get_user_by_name(name, userlist);
-    
+    // We then find and return all the policies linked to that user
     return policies.filter(function(item) {
         return item.clientId == user.id;
     })

@@ -20,7 +20,7 @@ const port = 8000;
 const URLClients = "https://www.mocky.io/v2/5808862710000087232b75ac"
 const URLPolicies = "https://www.mocky.io/v2/580891a4100000e8242b75c5"
 
-// Authlevels:
+// Authlevels
 const user_required = ["user", "admin"]
 
 
@@ -42,9 +42,8 @@ async function main() {
         return;
     }
 
-    // We proceed by declaring express GET functions and setting up "authentication"
+    // We proceed by setting up "authentication"
 
-    // ROLE AUTHENTICATION.
     // requires roles: 'users', 'admin'
     app.use(function(req, res, next) {
         if (!req.headers.authorization) {
@@ -58,13 +57,14 @@ async function main() {
         next();
       });
 
-    // Filter by user_id
-    app.get('/filter/id/:id', (req, res) => {
+    // We now declare the express functions
+    // Get by user_id
+    app.get('/user/id/:id', (req, res) => {
         res.json(utils.get_user_by_id(req.params.id, CLIENTS));
     });
 
-    // Filter by username
-    app.get('/filter/username/:username', (req, res) => {
+    // Get by username
+    app.get('/user/name/:username', (req, res) => {
         res.json(utils.get_user_by_name(req.params.username, CLIENTS));
     });
 
@@ -81,12 +81,12 @@ async function main() {
 
 
     // Get list policies linked to user
-    app.get('/policies/list/:username', (req, res) => {
+    app.get('/policies/username/:username', (req, res) => {
         res.json(utils.get_policies_from_user(req.params.username, POLICIES, CLIENTS));
     });
 
     // Get user linked to policy
-    app.get('/policies/users/:id', (req, res) => {
+    app.get('/policies/getuser/:id', (req, res) => {
         res.json(utils.get_user_from_policy(req.params.id, POLICIES, CLIENTS));
     });
 
