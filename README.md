@@ -1,16 +1,18 @@
 # nodejs-code-assesment
 
 I was tasked to develop a WebAPI for querying the data found on both "mocky.io" links.
-I went as vanilla node as possible to avoid getting into 3rd party licensing, only external dependency used was express.js. (And nodemon on dev environment)
+I went as vanilla node as possible to avoid getting into 3rd party licensing, only external dependency in use in production is express.js.
 
 The use of Authentication was required. As the provided jsons were missing any kind of hash or password I decided to just "fake" the authorization header, 
 and use the user ID as token. Of course this is not suitable in a real life implementation and a proper authorization (JWT, OAuth..) should have been set up
 according the project/client needs.
 
-You can find the application on both files, main.js and utils.js. I wanted to keep the "database queries" away from the main express application, as in a
-real life environment I expect the use of a proper database and some kind of ORM.
+You can find the main express application on main.js, it will handle authentication and load each route. The "database queries" can be found on utils.js, 
+they are there somewhat as a placeholder, as in a real life environment I expect the use of a proper database and some kind of ORM.
 
-After I set up the authorization, I decided to build a quick script (see tests.js) to make sure everything was working as expected. You can use it to test the application.
+There are also Jest tests for each function to be found inside test/test.js
+
+After I set up the authorization, I decided to build a quick script (see poc.js) to query the API without needing external tools (like Postman) for authentication.
 
 ### Dev environment
 This mockup has been developed and tested on Debian 11 using node.js v20.0 and npm v9.6.4

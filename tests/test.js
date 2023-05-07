@@ -27,7 +27,7 @@ const testPolicy = {
     "clientId":"e8fd159b-57c4-4d36-9bd7-a59ca13057bb"
 }
 
-describe("Get /user/", () => {
+describe("Tests for /user and /policies", () => {
     let app;
 
     beforeAll(async () => {
