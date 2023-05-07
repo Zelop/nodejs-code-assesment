@@ -31,26 +31,25 @@ Run the express application
 ```
 node main.js
 ```
-
 ### Test instructions
+
+Make sure you have installed dev dependencies (jest, supertest), then run
+
+```
+npm test
+```
+
+### PoC Usage
 With the express server running, open a new terminal and run
 ```
-node tests.js
+node poc.js
 ```
 
 You'll be prompted with the usage help:
 ```
-Usage: node tests.js USERID OPTION ARGUMENT
+Usage: node poc.js USERID OPTION ARGUMENT
 Possible options are: userid, username, policyname, policynumber         
-Example: node tests.js ce70aa35-912b-47a8-9cb6-386c5bc2be03 userid ce70aa35-912b-47a8-9cb6-386c5bc2be03
-```
-
-Example of tests from an admin user:
-```
-node tests.js ce70aa35-912b-47a8-9cb6-386c5bc2be03 userid e8fd159b-57c4-4d36-9bd7-a59ca13057bb
-node tests.js ce70aa35-912b-47a8-9cb6-386c5bc2be03 username Odonnell
-node tests.js ce70aa35-912b-47a8-9cb6-386c5bc2be03 policyname Cox
-node tests.js ce70aa35-912b-47a8-9cb6-386c5bc2be03 policynumber 64cceef9-3a01-49ae-a23b-3761b604800b
+Example: node poc.js ce70aa35-912b-47a8-9cb6-386c5bc2be03 userid ce70aa35-912b-47a8-9cb6-386c5bc2be03
 ```
 
 Please note test requests are hardcoded on port 8000. If you change the port on main.js and want to run the same tests make sure to edit those on the 
