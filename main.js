@@ -7,6 +7,10 @@ const express = require('express');
 const app = express();
 const port = 8000;
 
+// Import routes
+const users_routes = require('./routes/users.js');
+const policies_routes = require('./routes/policies.js')
+
 /* Assessment Note: 
     Recommendations: "Think some ways to use a database" 
     We are going to store the lists from mocky into variables.
@@ -44,7 +48,6 @@ async function main() {
 
     // We proceed by setting up "authentication"
 
-    // requires roles: 'users', 'admin'
     app.use(function(req, res, next) {
         if (!req.headers.authorization) {
           return res.status(403).json({ error: 'Missing credentials' });
@@ -55,48 +58,40 @@ async function main() {
             }
         }
         next();
-      });
-
-    // We now declare the express functions
-    // Get by user_id
-    app.get('/user/id/:id', (req, res) => {
-        res.json(utils.get_user_by_id(req.params.id, CLIENTS));
     });
 
-    // Get by username
-    app.get('/user/name/:username', (req, res) => {
-        res.json(utils.get_user_by_name(req.params.username, CLIENTS));
-    });
+    // As we lack a DB we will just send the CLIENT data embedded in the request. 
+    app.use('/user', function(req, res, next) {
+        req.CLIENTS = CLIENTS;
+        next();
+    }, users_routes);
 
-    
-    // Admin is required for the other GETs
-    // requires roles: 'admin'
+    // Admin is required for the other routes
     app.use(function(req, res, next) {  
         auth = req.headers.authorization.split(' ')[1];
             if (utils.get_user_role(auth, CLIENTS) != "admin") {
                 return res.status(403).json();
             }
         next();
-      });
-
-
-    // Get list policies linked to user
-    app.get('/policies/username/:username', (req, res) => {
-        res.json(utils.get_policies_from_user(req.params.username, POLICIES, CLIENTS));
     });
 
-    // Get user linked to policy
-    app.get('/policies/getuser/:id', (req, res) => {
-        res.json(utils.get_user_from_policy(req.params.id, POLICIES, CLIENTS));
-    });
+    // As we lack a DB we will just send the CLIENT and POLICIES data embedded in the request. 
+    app.use('/policies', function(req, res, next) {
+        req.CLIENTS = CLIENTS;
+        req.POLICIES = POLICIES;
+        next();
+    }, policies_routes);
 
     // We start the express server
-    app.listen(port, () => {
-        console.log(`Express listening on port ${port}.`)
-    })
+    if (process.env.NODE_ENV !== 'test') {
+        const server = app.listen(port, () => {
+            console.log(`Express listening on port ${port}.`)
+        }) 
+    }
+    return app
 
 }
 
 main();
 
-
+module.exports = main;
